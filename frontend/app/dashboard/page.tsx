@@ -10,6 +10,7 @@ import {
 import { useAuth } from '@/context/AuthContext';
 import { contractsAPI } from '@/lib/api';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import toast from 'react-hot-toast';
 
 interface Contract {
@@ -279,6 +280,7 @@ export default function DashboardPage() {
           )}
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

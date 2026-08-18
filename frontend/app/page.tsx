@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Scale, ShieldCheck, Zap, FileText, ArrowRight, CheckCircle2, AlertTriangle, Lightbulb } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
 const features = [
   {
@@ -318,22 +319,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Footer ── */}
-      <footer style={{
-        borderTop: '1px solid var(--color-border)',
-        padding: '32px 24px',
-        textAlign: 'center',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '12px' }}>
-          <Scale size={16} color="var(--color-gold)" />
-          <span style={{ fontFamily: 'var(--font-playfair)', fontWeight: '700', color: 'var(--color-text-primary)' }}>Lexora</span>
-        </div>
-        <p style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>
-          For informational purposes only. Not legal advice. Always consult a qualified lawyer.
-        </p>
-        <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginTop: '8px' }}>
-          © 2026 Lexora. All rights reserved.
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 }

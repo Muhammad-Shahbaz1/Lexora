@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { contractsAPI } from '@/lib/api';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import toast from 'react-hot-toast';
 
 interface Contract {
@@ -450,6 +451,8 @@ export default function ResultsPage() {
           </div>
         </div>
       </div>
+
+      <Footer />
 
       <style jsx global>{`
         @keyframes spin { to { transform: rotate(360deg); } }
