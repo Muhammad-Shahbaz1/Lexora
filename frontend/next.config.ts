@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Disable the development 'N' badge/indicator
+  devIndicators: false,
   images: {
     remotePatterns: [
       {

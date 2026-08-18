@@ -58,6 +58,14 @@
   --transition-slow: 400ms ease;
 }
 
+/* Hide Next.js Development Indicator / Watermark */
+nextjs-portal,
+[data-nextjs-dev-overlay],
+[data-nextjs-toast],
+div[style*="z-index: 9000"] {
+  display: none !important;
+}
+
 /* ============================================================
    BASE STYLES
    ============================================================ */
