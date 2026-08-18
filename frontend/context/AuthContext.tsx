@@ -31,6 +31,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const res = await authAPI.getMe();
         setUser(res.data.user);
       } catch {
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('lexora_auth_token');
+        }
         setUser(null);
       } finally {
         setLoading(false);
@@ -41,17 +44,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (email: string, password: string) => {
     const res = await authAPI.login({ email, password });
+    if (res.data.token && typeof window !== 'undefined') {
+      localStorage.setItem('lexora_auth_token', res.data.token);
+    }
     setUser(res.data.user);
   };
 
   const register = async (name: string, email: string, password: string) => {
     const res = await authAPI.register({ name, email, password });
+    if (res.data.token && typeof window !== 'undefined') {
+      localStorage.setItem('lexora_auth_token', res.data.token);
+    }
     setUser(res.data.user);
   };
 
   const logout = async () => {
-    await authAPI.logout();
-    setUser(null);
+    try {
+      await authAPI.logout();
+    } catch {
+      // ignore
+    } finally {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('lexora_auth_token');
+      }
+      setUser(null);
+    }
   };
 
   return (

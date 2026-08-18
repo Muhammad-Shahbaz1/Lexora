@@ -10,15 +10,21 @@ const api = axios.create({
   },
 });
 
-// Response interceptor for global error handling
+// Request interceptor to attach JWT token from localStorage if present
+api.interceptors.request.use((config) => {
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('lexora_auth_token');
+    if (token && config.headers) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  }
+  return config;
+});
+
+// Response interceptor - cleanly pass error to callers without forceful window redirect loops
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      if (typeof window !== 'undefined') {
-        window.location.href = '/auth/login';
-      }
-    }
     return Promise.reject(error);
   }
 );

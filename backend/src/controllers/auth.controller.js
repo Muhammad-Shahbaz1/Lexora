@@ -30,11 +30,12 @@ const register = asyncHandler(async (req, res) => {
   const user = await User.create({ name, email, password });
 
   // Generate JWT and set cookie
-  generateToken(user._id, res);
+  const token = generateToken(user._id, res);
 
   res.status(201).json({
     success: true,
     message: 'Account created successfully',
+    token,
     user: {
       _id: user._id,
       name: user.name,
@@ -65,11 +66,12 @@ const login = asyncHandler(async (req, res) => {
   }
 
   // Generate JWT and set cookie
-  generateToken(user._id, res);
+  const token = generateToken(user._id, res);
 
   res.status(200).json({
     success: true,
     message: 'Login successful',
+    token,
     user: {
       _id: user._id,
       name: user.name,
