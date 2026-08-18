@@ -63,7 +63,7 @@ export default function LandingPage() {
       <section style={{
         position: 'relative',
         overflow: 'hidden',
-        padding: 'clamp(80px, 12vw, 140px) 24px clamp(60px, 8vw, 100px)',
+        padding: 'clamp(32px, 5vw, 56px) 24px clamp(48px, 6vw, 80px)',
         textAlign: 'center',
       }}>
         {/* Background glow blobs */}
@@ -89,7 +89,7 @@ export default function LandingPage() {
             background: 'var(--color-gold-dim)',
             border: '1px solid rgba(245,197,65,0.2)',
             borderRadius: '99px',
-            marginBottom: '28px',
+            marginBottom: '20px',
           }}>
             <Scale size={13} color="var(--color-gold)" />
             <span style={{ fontSize: '12px', fontWeight: '600', color: 'var(--color-gold)', letterSpacing: '0.04em' }}>
