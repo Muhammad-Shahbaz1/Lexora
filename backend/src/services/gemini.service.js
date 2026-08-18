@@ -59,11 +59,11 @@ const fetchFileAsBase64 = async (url) => {
  * @param {string} category - Contract category (rent/job/business/other)
  */
 const analyzeContract = async (fileUrl, mimeType, category) => {
-  // Try models in order of preference (newest first)
+  // Try models in order of preference (Gemini 3.7, 3.6, 3.5)
   const models = [
-    'gemini-2.5-flash',
-    'gemini-2.0-flash',
-    'gemini-1.5-flash',
+    'gemini-3.7-flash',
+    'gemini-3.6-flash',
+    'gemini-3.5-flash',
   ];
 
   let lastError;
