@@ -1,7 +1,5 @@
 import { ImageResponse } from 'next/og';
 
-export const runtime = 'edge';
-
 export const size = {
   width: 180,
   height: 180,
@@ -14,13 +12,13 @@ export default function Icon() {
       <div
         style={{
           fontSize: 100,
-          background: 'linear-gradient(135deg, #f5c541, #dfa818)',
+          background: '#f5c541',
           width: '100%',
           height: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          borderRadius: '40px',
+          borderRadius: '36px',
         }}
       >
         ⚖️
