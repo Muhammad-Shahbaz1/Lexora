@@ -45,6 +45,10 @@ export const authAPI = {
     api.post('/auth/register', data),
   login: (data: { email: string; password: string }) =>
     api.post('/auth/login', data),
+  forgotPassword: (data: { email: string }) =>
+    api.post('/auth/forgot-password', data),
+  resetPassword: (data: { email: string; resetCode: string; newPassword: string }) =>
+    api.post('/auth/reset-password', data),
   logout: () => api.post('/auth/logout'),
   getMe: () => api.get('/auth/me'),
 };

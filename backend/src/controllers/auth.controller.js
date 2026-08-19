@@ -82,6 +82,90 @@ const login = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc    Request Password Reset Code
+// @route   POST /api/auth/forgot-password
+// @access  Public
+const forgotPassword = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    res.status(400);
+    throw new Error('Please provide your registered email address');
+  }
+
+  const user = await User.findOne({ email: email.toLowerCase() });
+  if (!user) {
+    res.status(404);
+    throw new Error('No user found with this email address');
+  }
+
+  // Generate a secure 6-digit numeric verification code
+  const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+  // Set token and expire in 15 minutes
+  user.resetPasswordToken = resetCode;
+  user.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
+  await user.save({ validateBeforeSave: false });
+
+  console.log(`🔐 Password Reset Code for ${user.email}: ${resetCode}`);
+
+  res.status(200).json({
+    success: true,
+    message: 'Password reset code generated successfully',
+    resetCode, // Sent in response for seamless in-app reset experience
+  });
+});
+
+// @desc    Reset Password using Code
+// @route   POST /api/auth/reset-password
+// @access  Public
+const resetPassword = asyncHandler(async (req, res) => {
+  const { email, resetCode, newPassword } = req.body;
+
+  if (!email || !resetCode || !newPassword) {
+    res.status(400);
+    throw new Error('Please provide email, 6-digit reset code, and new password');
+  }
+
+  if (newPassword.length < 6) {
+    res.status(400);
+    throw new Error('Password must be at least 6 characters');
+  }
+
+  const user = await User.findOne({
+    email: email.toLowerCase(),
+    resetPasswordToken: resetCode.trim(),
+    resetPasswordExpire: { $gt: Date.now() },
+  }).select('+resetPasswordToken +resetPasswordExpire');
+
+  if (!user) {
+    res.status(400);
+    throw new Error('Invalid or expired reset code. Please request a new one.');
+  }
+
+  // Set new password
+  user.password = newPassword;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpire = undefined;
+  await user.save();
+
+  // Generate new JWT
+  const token = generateToken(user._id, res);
+
+  res.status(200).json({
+    success: true,
+    message: 'Password has been reset successfully! Logging you in...',
+    token,
+    user: {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      totalAnalyses: user.totalAnalyses,
+      createdAt: user.createdAt,
+    },
+  });
+});
+
 // @desc    Logout user
 // @route   POST /api/auth/logout
 // @access  Private
@@ -110,4 +194,11 @@ const getMe = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { register, login, logout, getMe };
+module.exports = {
+  register,
+  login,
+  logout,
+  getMe,
+  forgotPassword,
+  resetPassword,
+};
