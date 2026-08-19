@@ -1,17 +1,27 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+// Smart API URL: Use env if defined, otherwise detect if on Vercel vs Localhost
+const getBaseUrl = () => {
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
+  }
+  if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
+    return 'https://lexora-production-b21a.up.railway.app/api';
+  }
+  return 'http://localhost:5000/api';
+};
 
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: getBaseUrl(),
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Request interceptor to attach JWT token from localStorage if present
+// Dynamic base URL on every request to guarantee correct environment
 api.interceptors.request.use((config) => {
+  config.baseURL = getBaseUrl();
   if (typeof window !== 'undefined') {
     const token = localStorage.getItem('lexora_auth_token');
     if (token && config.headers) {
